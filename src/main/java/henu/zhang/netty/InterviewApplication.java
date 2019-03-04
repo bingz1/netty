@@ -1,13 +1,16 @@
 package henu.zhang.netty;
 
-import henu.zhang.netty.server.TimeServer;
+import javafx.application.Application;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * @author 张向兵
+ */
 @SpringBootApplication
 public class InterviewApplication {
 
     public static void main(String[] args) {
-        new TimeServer().bind(8000);
+        SpringApplication.run(Application.class, args);
     }
 }

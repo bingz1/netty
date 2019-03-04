@@ -13,6 +13,9 @@ import io.netty.handler.timeout.IdleStateHandler;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author 张向兵
+ */
 public class TimeServer {
 
     public void bind(int port) {

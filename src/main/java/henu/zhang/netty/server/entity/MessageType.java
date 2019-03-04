@@ -1,5 +1,8 @@
 package henu.zhang.netty.server.entity;
 
+/**
+ * @author 张向兵
+ */
 public class MessageType {
 
     public static int LOGIN = 1; //登录服务器

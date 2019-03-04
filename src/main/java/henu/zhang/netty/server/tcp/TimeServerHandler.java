@@ -3,10 +3,13 @@ package henu.zhang.netty.server.tcp;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
 
+/**
+ * @author 张向兵
+ */
 public class TimeServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+    public void channelInactive(ChannelHandlerContext ctx) {
         System.out.println("Active");
     }
 
