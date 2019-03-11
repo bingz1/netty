@@ -1,5 +1,6 @@
 package henu.zhang.netty.server;
 
+import henu.zhang.netty.server.tcp.TimeServerHandler;
 import henu.zhang.netty.server.websocket.WebSocketServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -52,7 +53,10 @@ public class TimeServer {
             //空闲检测
             pipeline.addLast(new IdleStateHandler(5, 0, 0, TimeUnit.SECONDS));
             pipeline.addLast(new HeartBeatServerHandler());
+            //WebSocket 协议
             pipeline.addLast(new WebSocketServerHandler());
+            //TCP 协议
+            pipeline.addLast(new TimeServerHandler());
         }
     }
 }

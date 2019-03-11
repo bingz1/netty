@@ -12,7 +12,6 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
 import io.netty.handler.codec.http.websocketx.*;
 import io.netty.util.CharsetUtil;
-import org.springframework.stereotype.Service;
 
 import static io.netty.handler.codec.http.HttpHeaderNames.HOST;
 
