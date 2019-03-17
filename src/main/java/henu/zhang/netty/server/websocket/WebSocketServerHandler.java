@@ -1,17 +1,16 @@
 package henu.zhang.netty.server.websocket;
 
-import com.alibaba.fastjson.JSON;
-import henu.zhang.netty.server.entity.AllClients;
-import henu.zhang.netty.server.entity.Message;
+import henu.zhang.netty.server.entity.Clients;
+import henu.zhang.netty.server.service.HandleMessageService;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.*;
 import io.netty.handler.codec.http.*;
 import io.netty.handler.codec.http.websocketx.*;
 import io.netty.util.CharsetUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import io.netty.channel.ChannelHandler.Sharable;
 
 import static io.netty.handler.codec.http.HttpHeaderNames.HOST;
 
@@ -22,9 +21,17 @@ import java.util.Map;
 /**
  * @author 张向兵
  */
+@Component
+@Sharable
 public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> {
 
     private WebSocketServerHandshaker handShaker;
+
+    @Autowired
+    private HandleMessageService handleMessageService;
+
+    @Autowired
+    private Clients clients;
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) {
@@ -45,8 +52,16 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
         ctx.flush();
     }
 
+    /**
+     * 处理异常关闭情况.
+     * 将客户端从连接信息中删除
+     *
+     * @param ctx
+     * @param cause
+     */
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        cause.printStackTrace();
         ctx.close();
     }
 
@@ -72,8 +87,8 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
          * 如果验证通过  将客户端保留在内存中
          * abc 生产上应当从数据库中读取
          */
-        if ("abc".equalsIgnoreCase(token)) {
-            AllClients.allClients.put(token, ctx.channel());
+        if ("token".equalsIgnoreCase(token)) {
+            clients.put(token, ctx);
         } else {
             sendHttpResponse(ctx, new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.UNAUTHORIZED));
             return;
@@ -88,6 +103,12 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
         }
     }
 
+    /**
+     * HTTP请求响应
+     *
+     * @param ctx
+     * @param res
+     */
     private static void sendHttpResponse(ChannelHandlerContext ctx, DefaultFullHttpResponse res) {
 
         // 返回应答给客户端
@@ -109,6 +130,12 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
         return "ws://" + location;
     }
 
+    /**
+     * 处理websocket类型消息
+     *
+     * @param ctx
+     * @param frame
+     */
     private void handlerWebSocketFrame(ChannelHandlerContext ctx, WebSocketFrame frame) {
 
         /**
@@ -136,52 +163,9 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
 
         if (frame instanceof TextWebSocketFrame) {
             // 收到的消息
-            String request = ((TextWebSocketFrame) frame).text();
-
-            //处理收到的消息
-            handleRequest(request);
-
-            System.out.println("服务端收到：" + request);
-            //给客户端返回接收状态
-            ctx.channel().write(new TextWebSocketFrame("服务器收到并返回：" + request));
+            String message = ((TextWebSocketFrame) frame).text();
+            handleMessageService.handleClientMessage(ctx, message);
         }
 
-    }
-
-    private void handleRequest(String request) {
-
-        Message message = JSON.parseObject(request, Message.class);
-        switch (message.getType()) {
-            case 1:
-                System.out.println(message.getMessage());
-                break;
-            case 2:
-                System.out.println(message.getMessage());
-                break;
-            case 3:
-                System.out.println(message.getMessage());
-                break;
-            case 4:
-                System.out.println(message.getMessage());
-                break;
-            case 5:
-                System.out.println(message.getMessage());
-                break;
-            case 6:
-                System.out.println(message.getMessage());
-                break;
-            case 7:
-                System.out.println(message.getMessage());
-                break;
-            case 8:
-                System.out.println(message.getMessage());
-                break;
-            case 9:
-                System.out.println(message.getMessage());
-                break;
-            default:
-                System.out.println(message.getMessage());
-                break;
-        }
     }
 }

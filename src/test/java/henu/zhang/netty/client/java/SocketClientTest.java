@@ -10,8 +10,7 @@ import static org.junit.Assert.*;
  */
 public class SocketClientTest {
 
-    @Test
-    public void run() throws Exception {
-        new SocketClient("127.0.0.1", 8000).run();
+    public static void main(String[] args) throws Exception {
+        new SocketClient("127.0.0.1", 8001).run();
     }
 }

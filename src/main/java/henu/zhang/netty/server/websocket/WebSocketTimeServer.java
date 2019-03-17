@@ -1,7 +1,6 @@
-package henu.zhang.netty.server;
+package henu.zhang.netty.server.websocket;
 
-import henu.zhang.netty.server.tcp.TimeServerHandler;
-import henu.zhang.netty.server.websocket.WebSocketServerHandler;
+import henu.zhang.netty.server.common.HeartBeatServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -11,6 +10,7 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.timeout.IdleStateHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
@@ -19,7 +19,10 @@ import java.util.concurrent.TimeUnit;
  * @author 张向兵
  */
 @Component
-public class TimeServer {
+public class WebSocketTimeServer {
+
+    @Autowired
+    private WebSocketServerHandler webSocketServerHandler;
 
     public void bind(int port) {
 
@@ -51,12 +54,11 @@ public class TimeServer {
             pipeline.addLast("aggregator", new HttpObjectAggregator(65536));
             pipeline.addLast("http-chunked", new ChunkedWriteHandler());
             //空闲检测
-            pipeline.addLast(new IdleStateHandler(5, 0, 0, TimeUnit.SECONDS));
+            pipeline.addLast(new IdleStateHandler(5, 5, 0, TimeUnit.SECONDS));
             pipeline.addLast(new HeartBeatServerHandler());
+
             //WebSocket 协议
-            pipeline.addLast(new WebSocketServerHandler());
-            //TCP 协议
-            pipeline.addLast(new TimeServerHandler());
+            pipeline.addLast(webSocketServerHandler);
         }
     }
 }

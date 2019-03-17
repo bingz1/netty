@@ -1,5 +1,6 @@
-package henu.zhang.netty.server;
+package henu.zhang.netty.server.common;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -8,9 +9,14 @@ import io.netty.handler.timeout.IdleStateEvent;
 
 import java.util.Date;
 
+/**
+ * @author 张向兵
+ */
 public class HeartBeatServerHandler extends ChannelInboundHandlerAdapter {
 
-    // 心跳丢失计数器
+    /**
+     * 心跳丢失计数器
+     */
     private int lossConnectCount = 0;
 
     @Override
@@ -25,6 +31,7 @@ public class HeartBeatServerHandler extends ChannelInboundHandlerAdapter {
                     ctx.channel().close();
                 }
             }
+
             ctx.channel().write(new TextWebSocketFrame("服务器收到并返回：" + new Date()));
             ctx.flush();
         } else {

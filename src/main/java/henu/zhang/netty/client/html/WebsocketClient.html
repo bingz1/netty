@@ -12,7 +12,7 @@
         window.WebSocket = window.MozWebSocket;
     }
     if (window.WebSocket) {
-        socket = new WebSocket("ws://127.0.0.1:8000?token=abc");
+        socket = new WebSocket("ws://127.0.0.1:8000?token=token");
         socket.onmessage = function(event) {
             var ta = document.getElementById('responseText');
             ta.value = ta.value + '\n' + event.data

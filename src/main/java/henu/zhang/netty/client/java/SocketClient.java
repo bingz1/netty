@@ -10,7 +10,6 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 /**
- *
  * @author zxb
  * @date 28/09/2016
  */
@@ -42,11 +41,10 @@ public class SocketClient {
 
             // Start the client.
             ChannelFuture f = b.connect(host, port).sync();
-
             // Wait until the connection is closed.
             f.channel().closeFuture().sync();
         } finally {
-            workerGroup.shutdownGracefully();
+            workerGroup.shutdownGracefully().sync();
         }
 
     }
