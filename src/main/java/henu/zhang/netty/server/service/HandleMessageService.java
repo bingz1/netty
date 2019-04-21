@@ -36,6 +36,8 @@ public class HandleMessageService {
      */
     public void handleServerMessage(String token, String message) {
         ChannelHandlerContext ctx = clients.get(token);
-        ctx.channel().write(new TextWebSocketFrame("服务器主动消息：" + message));
+        if (ctx != null) {
+            ctx.channel().write(new TextWebSocketFrame("服务器主动消息：" + message));
+        }
     }
 }

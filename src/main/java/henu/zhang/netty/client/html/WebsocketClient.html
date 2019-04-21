@@ -29,21 +29,21 @@
         alert("你的浏览器不支持！");
     }
 
-    function send(message) {
+    function send(msg) {
         if (!window.WebSocket) {
             return;
         }
         if (socket.readyState == WebSocket.OPEN) {
-            socket.send(message);
+            socket.send(msg);
         } else {
             alert("连接没有开启.");
         }
     }
 </script>
 <form onsubmit="return false;">
-    <input type="text" name="message" value="Hello, World!"><input
+    <input type="text" name="msg" value="Hello, World!"><input
         type="button" value="发送消息"
-        onclick="send(this.form.message.value)">
+        onclick="send(this.form.msg.value)">
     <h3>输出：</h3>
     <textarea id="responseText" style="width: 500px; height: 300px;"></textarea>
     <input type="button" onclick="javascript:document.getElementById('responseText').value=''" value="清空">

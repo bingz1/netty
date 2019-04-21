@@ -1,8 +1,12 @@
 package henu.zhang.netty.controller;
 
-import henu.zhang.netty.server.service.HandleMessageService;
+import com.alibaba.fastjson.JSON;
+import henu.zhang.netty.server.entity.Msg;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -13,11 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class MessageController {
 
     @Autowired
-    private HandleMessageService handleMessageService;
+    private RedisTemplate redisTemplate;
 
-    @GetMapping("send")
-    public String getName() {
-        handleMessageService.handleServerMessage("token", "我是服务器主动发的消息");
+    @Autowired
+    private ChannelTopic topic;
+
+    @PostMapping("send")
+    public String getName(@RequestBody Msg msg) {
+        redisTemplate.convertAndSend(topic.getTopic(), msg);
         return "张向兵";
     }
 

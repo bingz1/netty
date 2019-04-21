@@ -16,7 +16,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by wanglong on 15/8/4.
+ *
+ * @author wanglong
+ * @date 15/8/4
  * http 请求工具类（包括post和get方法）
  */
 @Service

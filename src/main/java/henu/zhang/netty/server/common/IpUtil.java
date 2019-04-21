@@ -9,10 +9,13 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+/**
+ * @author 张向兵
+ */
 @Service
-public class IPUtil {
+public class IpUtil {
 
-    private static Logger logger = LoggerFactory.getLogger(IPUtil.class);
+    private static Logger logger = LoggerFactory.getLogger(IpUtil.class);
 
     private static String localIP;
 
@@ -21,7 +24,10 @@ public class IPUtil {
     @Autowired
     private HttpRequestUtil httpRequestUtil;
 
-    //获取内网IP
+    /**
+     * 获取内网IP
+     * @return
+     */
     public String getLocalIP(){
         if (localIP == null){
             InetAddress addr;
@@ -35,6 +41,10 @@ public class IPUtil {
         return localIP;
     }
 
+    /**
+     * 获取本机的公网IP
+     * @return
+     */
     public String getPublicIP(){
         String url = "http://members.3322.org/dyndns/getip";
         if (publicIP == null){

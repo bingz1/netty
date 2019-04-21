@@ -6,7 +6,7 @@ import lombok.Data;
  * @author 张向兵
  */
 @Data
-public class Message {
+public class Msg {
 
     /**
      * 消息类型
